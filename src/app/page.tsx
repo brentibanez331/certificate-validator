@@ -18,7 +18,7 @@ export default function Home() {
         </div>
         <div>
           <Link href="/login" className="mr-4 text-black">Log In</Link>
-          <Link href="/signup" className="mr-4 text-black">Sign Up</Link>
+          <Link href="/signup" className="bg-gray-200 px-4 py-1  rounded mr-4 text-black">Sign Up</Link>
         </div>
       </header>
       <main className="flex flex-1 items-center justify-between px-5">
@@ -26,7 +26,7 @@ export default function Home() {
           <h1 className="text-5xl  mb-4 ">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonumy eirmod tempor incididunt ut labore et dolore magna aliquyam erat.
           </h1>
-          <div className="flex justify-center mt-4">
+          <div className="flex mt-6">
             <button className="bg-gray-200 px-4 py-2 rounded mr-2">Try for Free</button>
             <button className="border border-black px-4 py-2 rounded">See How It works</button>
           </div>
