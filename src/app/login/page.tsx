@@ -35,5 +35,5 @@ export default function Form() {
         </div>
       </main>
     </div>
-  )
+  );
 }
