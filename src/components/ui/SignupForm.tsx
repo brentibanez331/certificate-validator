@@ -33,7 +33,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onToggle }) => {
                     'Content-Type': 'application/json',
                 },
             });
-            if (response.status === 201) {
+            if (response.data["success"]) {
                 setSuccessMessage('Signup successful!');
                 setErrorMessage('');
             } else {
