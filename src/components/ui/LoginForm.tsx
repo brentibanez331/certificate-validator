@@ -34,7 +34,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onToggle}) => {
                     placeholder="Enter your password"
                 />
             </div>
-           
+            <div className="mb-4 flex items-center justify-center">
+                    <button className="bg-gray-400 px-4 py-2 rounded" type="submit">Log in</button>
+                </div>
         </form>
     )
 }

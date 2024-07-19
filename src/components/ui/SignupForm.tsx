@@ -15,10 +15,10 @@ const SignupForm: React.FC<SignupFormProps> = ({ onToggle }) => {
         password: '',
     });
     const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        console.log(`Changing ${name} to ${value}`);
         setSignupData((prevState) => ({
             ...prevState,
             [name]: value,
@@ -27,17 +27,26 @@ const SignupForm: React.FC<SignupFormProps> = ({ onToggle }) => {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('Submitting form with data:', signupData);
         try {
-            const response = await axios.post("https://certificate-validator-db.onrender.com/signup", signupData);
-            if (response.data["success"]) {
+            const response = await axios.post("/api/signup", signupData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (response.status === 201) {
                 setSuccessMessage('Signup successful!');
-                console.log('Response from server:', response.data);
+                setErrorMessage('');
             } else {
-                console.error('Signup failed:', response.data);
+                setErrorMessage('Signup failed.');
             }
         } catch (error) {
-            console.error('Error submitting form:', error);
+            if (axios.isAxiosError(error)) {
+                console.error('Axios error:', error.response);
+                setErrorMessage(error.response?.data?.message || 'An error occurred during signup.');
+            } else {
+                console.error('Error:', error);
+                setErrorMessage('An error occurred during signup.');
+            }
         }
     };
 
@@ -113,6 +122,11 @@ const SignupForm: React.FC<SignupFormProps> = ({ onToggle }) => {
             {successMessage && (
                 <div className="mt-4 text-green-500">
                     {successMessage}
+                </div>
+            )}
+            {errorMessage && (
+                <div className="mt-4 text-red-500">
+                    {errorMessage}
                 </div>
             )}
         </div>
