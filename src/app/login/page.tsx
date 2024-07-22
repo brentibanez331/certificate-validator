@@ -1,10 +1,23 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import SignupForm from '../../components/ui/SignupForm'
 import LoginForm from '../../components/ui/LoginForm'
+import { useRouter } from 'next/navigation'
 
 export default function Form() {
-  const [isSignup, setIsSignup] = useState(false);
+  const router = useRouter()
+  const [isSignup, setIsSignup] = useState(false)
+
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search)
+    const formType = query.get('type')
+    setIsSignup(formType === 'signup')
+  }, [])
+
+  const handleFormSwitch = (type: 'signup' | 'login') => {
+    setIsSignup(type === 'signup')
+    router.push(`/login?type=${type}`)
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white">
@@ -20,20 +33,20 @@ export default function Form() {
           <div className="flex mb-4">
             <button
               className={`flex-1 py-2 px-4 rounded ${isSignup ? 'bg-gray-400' : 'bg-gray-200'}`}
-              onClick={() => setIsSignup(true)}
+              onClick={() => handleFormSwitch('signup')}
             >
               Signup
             </button>
             <button
               className={`flex-1 py-2 px-4 rounded ${isSignup ? 'bg-gray-200' : 'bg-gray-400'}`}
-              onClick={() => setIsSignup(false)}
+              onClick={() => handleFormSwitch('login')}
             >
               Login
             </button>
           </div>
-          {isSignup ? <SignupForm onToggle={() => setIsSignup(true)} /> : <LoginForm onToggle={() => setIsSignup(false)} />}
+          {isSignup ? <SignupForm onToggle={() => handleFormSwitch('signup')} /> : <LoginForm onToggle={() => handleFormSwitch('login')} />}
         </div>
       </main>
     </div>
-  );
+  )
 }
