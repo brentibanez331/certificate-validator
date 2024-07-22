@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 
-
 const linkStyle = {
   margin: '0 20px',
   fontSize: '18px',
@@ -17,18 +16,18 @@ export default function Home() {
           <span className="text-black font-bold">Certificate Validation System</span>
         </div>
         <div>
-          <Link href="/login" className="mr-4 text-black">Log In</Link>
-          <Link href="/signup" className="bg-gray-200 px-4 py-1  rounded mr-4 text-black">Sign Up</Link>
+          <Link href="/login?type=login" className="mr-4 text-black">Log In</Link>
+          <Link href="/login?type=signup" className="bg-gray-200 px-4 py-1 rounded mr-4 text-black">Sign Up</Link>
         </div>
       </header>
       <main className="flex flex-1 items-center justify-between px-5">
         <div className="text-left md:w-1/2">
-          <h1 className="text-5xl  mb-4 ">
+          <h1 className="text-5xl mb-4">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonumy eirmod tempor incididunt ut labore et dolore magna aliquyam erat.
           </h1>
           <div className="flex mt-6">
             <button className="bg-gray-200 px-4 py-2 rounded mr-2">Try for Free</button>
-            <button className="border border-black px-4 py-2 rounded">See How It works</button>
+            <button className="border border-black px-4 py-2 rounded">See How It Works</button>
           </div>
         </div>
         <div className="bg-gray-200 w-96 h-96 ml-8 px-5"></div>

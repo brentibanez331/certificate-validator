@@ -1,5 +1,6 @@
 "use client"
 import React, {useState, ChangeEvent, FormEvent} from 'react'
+import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 interface LoginFormProps {
@@ -8,11 +9,12 @@ interface LoginFormProps {
 
 const LoginForm: React.FC<LoginFormProps> = ({ onToggle}) => {
     const [loginData, setLoginData] = useState ({
-        username: '',
+        email: '',
         password: '',
     })
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const router = useRouter();
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -25,16 +27,18 @@ const LoginForm: React.FC<LoginFormProps> = ({ onToggle}) => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const response = await axios.post("/api/login", loginData, {
+            const response = await axios.post("http://192.168.1.7:5000/api/login", loginData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
-            if (response.data["success"]) {
+            if (response.status === 200) {
                 setSuccessMessage('Login successful!');
                 setErrorMessage('');
+                router.push('/login/users');
             } else {
                 setErrorMessage('Login failed.');
+                setSuccessMessage('');
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -44,6 +48,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onToggle}) => {
                 console.error('Error:', error);
                 setErrorMessage('An error occurred during login.');
             }
+            setSuccessMessage('');
         }
     };
 
@@ -51,14 +56,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onToggle}) => {
         <div>
         <form onSubmit={handleSubmit}>
             <div className="mb-4">
-                <label className="block text-sm mb-1" htmlFor="username">Username</label>
+                <label className="block text-sm mb-1" htmlFor="email">Email</label>
                 <input 
                     className="w-full px-3 py-2 border rounded"
-                    id="username"
-                    name="username"
-                    type="text"
-                    placeholder="Enter your username"
-                    value={loginData.username}
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={loginData.email}
                     onChange={handleChange}
                 />
             </div>
