@@ -56,7 +56,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onToggle}) => {
         <div>
         <form onSubmit={handleSubmit}>
             <div className="mb-4">
-                <label className="block text-sm mb-1" htmlFor="username">Username</label>
+                <label className="block text-sm mb-1" htmlFor="email">Email</label>
                 <input 
                     className="w-full px-3 py-2 border rounded"
                     id="email"

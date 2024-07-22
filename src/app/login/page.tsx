@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react'
-import SignupForm from '../../components/ui/SignupForm';
-import LoginForm from '../../components/ui/LoginForm';
+import SignupForm from '../../components/ui/SignupForm'
+import LoginForm from '../../components/ui/LoginForm'
 
 export default function Form() {
   const [isSignup, setIsSignup] = useState(false);
