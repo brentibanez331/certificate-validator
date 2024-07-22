@@ -8,7 +8,7 @@ const nextConfig = {
         return [
             {
                 source: '/api/:path*',
-                destination: 'https://certificate-validator-db.onrender.com/:path*', // Proxy to backend
+                destination: 'http://192.168.1.7:5000/:path*', // Proxy to backend
             },
         ];
     },

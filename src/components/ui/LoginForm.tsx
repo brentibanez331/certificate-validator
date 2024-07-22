@@ -27,12 +27,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onToggle}) => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const response = await axios.post("/api/login", loginData, {
+            const response = await axios.post("http://192.168.1.7:5000/api/login", loginData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
-            if (response.data["success"]) {
+            if (response.status === 200) {
                 setSuccessMessage('Login successful!');
                 setErrorMessage('');
                 router.push('/login/users');

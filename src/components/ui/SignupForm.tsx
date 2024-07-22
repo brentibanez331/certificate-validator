@@ -28,12 +28,21 @@ const SignupForm: React.FC<SignupFormProps> = ({ onToggle }) => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const response = await axios.post("/api/signup", signupData, {
+            const response = await axios.post("http://192.168.1.7:5000/api/signup", {
+                email: signupData.email,
+                password: signupData.password,
+                username: signupData.username,
+                firstName: signupData.firstname,
+                lastName: signupData.lastname,
+                organizationId: 1, 
+            }, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
+
             });
-            if (response.data["success"]) {
+
+            if (response.status === 200) {
                 setSuccessMessage('Signup successful!');
                 setErrorMessage('');
             } else {
@@ -42,7 +51,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onToggle }) => {
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 console.error('Axios error:', error.response);
-                setErrorMessage(error.response?.data?.message || 'An error occurred during signup.');
+                setErrorMessage(error.response?.data?.message || 'Axios Error! An error occurred during signup.');
             } else {
                 console.error('Error:', error);
                 setErrorMessage('An error occurred during signup.');
