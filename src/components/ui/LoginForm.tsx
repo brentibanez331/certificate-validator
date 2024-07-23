@@ -1,5 +1,5 @@
 "use client"
-import React, {useState, ChangeEvent, FormEvent} from 'react'
+import React, {useState, ChangeEvent, FormEvent} from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
@@ -27,15 +27,17 @@ const LoginForm: React.FC<LoginFormProps> = ({ onToggle}) => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://192.168.1.7:5000/api/login", loginData, {
+            const response = await axios.post("http://192.168.1.3:5000/api/login", loginData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
             if (response.status === 200) {
+                const userData = response.data;
+                localStorage.setItem('user', JSON.stringify(userData));
                 setSuccessMessage('Login successful!');
                 setErrorMessage('');
-                router.push('/login/users');
+                router.push('/login/dashboard');
             } else {
                 setErrorMessage('Login failed.');
                 setSuccessMessage('');
