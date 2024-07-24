@@ -56,7 +56,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onToggle }) => {
         }
 
         try {
-            const response = await axios.post("http://192.168.1.11:5000/api/signup", {
+            const response = await axios.post(`${apiConfig}/api/signup`, {
                 email: signupData.email,
                 password: signupData.password,
                 username: signupData.username,
