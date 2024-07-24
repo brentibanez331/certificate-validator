@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import axios from 'axios';
+import apiConfig from '../backend/apiConfig';
 
 interface SignupFormProps {
     onToggle: () => void;
@@ -24,7 +25,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onToggle }) => {
     useEffect(() => {
         const fetchOrganizations = async () => {
             try {
-                const response = await axios.get('http://192.168.1.3:5000/api/organization');
+                const response = await axios.get(`${apiConfig}/api/organization`);
                 setOrganizations(response.data.map((org: { id: number, organizationName: string }) => ({
                     id: org.id,
                     organizationName: org.organizationName,

@@ -1,7 +1,10 @@
 "use client"
 import React, { useState, ChangeEvent, FormEvent } from 'react';
+import { useRouter } from 'next/router';
 
 const EventRegistration = () => {
+    const router = useRouter();
+
     const [formData, setFormData] = useState({
         eventTitle: '',
         department: '',
@@ -28,6 +31,10 @@ const EventRegistration = () => {
         e.preventDefault();
         // Handle form submission logic
         console.log('Form submitted:', formData);
+    };
+
+    const handleCancel = () => {
+        router.back(); 
     };
 
     return (
@@ -118,7 +125,7 @@ const EventRegistration = () => {
                         />
                     </div>
                     <div className="mt-6 flex justify-end space-x-4">
-                        <button className="px-4 py-2 bg-gray-300 rounded" type="button">Cancel</button>
+                        <button className="px-4 py-2 bg-gray-300 rounded" type="button" onClick={handleCancel}>Cancel</button>
                         <button className="px-4 py-2 bg-blue-600 text-white rounded" type="submit">Next</button>
                     </div>
                 </form>
