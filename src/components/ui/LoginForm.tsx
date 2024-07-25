@@ -2,7 +2,6 @@
 import React, {useState, ChangeEvent, FormEvent} from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import apiConfig from '../backend/apiConfig';
 
 interface LoginFormProps {
     onToggle: () => void;
@@ -28,7 +27,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onToggle}) => {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${apiConfig.apiBaseUrl}/api/login`, loginData, {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/login`, loginData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
