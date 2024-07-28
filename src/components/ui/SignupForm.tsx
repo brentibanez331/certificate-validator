@@ -24,7 +24,9 @@ const SignupForm: React.FC<SignupFormProps> = ({ onToggle }) => {
     useEffect(() => {
         const fetchOrganizations = async () => {
             try {
-                const response = await axios.get('http://192.168.1.7:5000/api/organization');
+                
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/organization`);
+                console.log(response);
                 setOrganizations(response.data.map((org: { id: number, organizationName: string }) => ({
                     id: org.id,
                     organizationName: org.organizationName,
@@ -55,7 +57,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onToggle }) => {
         }
 
         try {
-            const response = await axios.post("http://192.168.1.7:5000/api/signup", {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/signup`, {
                 email: signupData.email,
                 password: signupData.password,
                 username: signupData.username,
