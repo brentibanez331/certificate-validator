@@ -2,8 +2,6 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import Papa from 'papaparse'; 
-import * as XLSX from 'xlsx';
 import UserHeader from '@/components/ui/UserHeader';
 
 const EventRegistration = () => {
@@ -33,33 +31,6 @@ const EventRegistration = () => {
         }
     }, []);
 
-    const parseCSV = (file: File) => {
-        return new Promise<string>((resolve, reject) => {
-            Papa.parse(file, {
-            complete: (results) => {
-                const text = results.data.map((row: any) => row.join(',')).join('\n');
-                resolve(text);
-            },
-            error: (error) => reject(error),
-            });
-        });
-    };
-
-    const parseXLSX = (file: File) => {
-        return new Promise<string>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const data = new Uint8Array(e.target!.result as ArrayBuffer);
-                const workbook = XLSX.read(data, { type: 'array' });
-                const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                const text = XLSX.utils.sheet_to_csv(sheet);
-                resolve(text);
-            };
-            reader.onerror = (error) => reject(error);
-            reader.readAsArrayBuffer(file);
-        });
-    };
-
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setEventData((prevState) => ({
@@ -78,31 +49,6 @@ const EventRegistration = () => {
         }
     };
 
-    const handleParticipantChange = async (e: ChangeEvent<HTMLInputElement>) => {
-        const { id, files } = e.target;
-        if (files && files[0]) {
-            const file = files[0];
-            try {
-                let text: string = '';
-                if (file.type.includes('csv')) {
-                    text = await parseCSV(file);
-                } else if (file.type.includes('sheet') || file.type.includes('excel')) {
-                    text = await parseXLSX(file);
-                }
-                
-                if (id === 'participantList') {
-                    // Update the textarea with the parsed text
-                    const textarea = document.getElementById('pastedList') as HTMLTextAreaElement;
-                    if (textarea) {
-                        textarea.value = text;
-                    }
-                }
-            } catch (error) {
-                console.error('Error processing file:', error);
-            }
-        }
-    };
-
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
@@ -112,7 +58,7 @@ const EventRegistration = () => {
         formData.append('startDateTime', eventData.startDateTime);
         formData.append('endDateTime', eventData.endDateTime);
         formData.append('eventDescription', eventData.eventDescription);
-        formData.append('organizationId', eventData.organizationId.toString()); // Convert to string
+        formData.append('organizationId', eventData.organizationId.toString());
         if (certificateFile) {
             formData.append('certificateFile', certificateFile);
         }
@@ -126,7 +72,8 @@ const EventRegistration = () => {
             if (response.status === 201) {
                 setSuccessMessage('Event created successfully!');
                 setErrorMessage('');
-                router.push('/login/dashboard/registerEvent/certificateTemplate')
+                const eventId = response.data.id;
+                router.push(`/login/dashboard/registerEvent/certificateTemplate?eventId=${eventId}`);
             } else {
                 setErrorMessage('Event creation failed');
             }
@@ -140,8 +87,6 @@ const EventRegistration = () => {
         }
     };
     
-    
-
     const handleCancel = () => {
         router.back();
     };
