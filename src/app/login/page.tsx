@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import SignupForm from '../../components/ui/SignupForm'
 import LoginForm from '../../components/ui/LoginForm'
 import { useRouter } from 'next/navigation'
-
+ 
 export default function Form() {
   const router = useRouter()
   const [isSignup, setIsSignup] = useState(false)
