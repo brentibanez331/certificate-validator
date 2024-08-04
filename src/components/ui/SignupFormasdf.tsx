@@ -6,7 +6,7 @@ interface SignupFormProps {
     onToggle: () => void;
 }
 
-const SignupForm: React.FC<SignupFormProps> = ({ onToggle }) => {
+const SignupFormasdfasef: React.FC<SignupFormProps> = ({ onToggle }) => {
     const [step, setStep] = useState(1); // Step 1: User info, Step 2: Organization
     const [signupData, setSignupData] = useState({
         firstname: '',

@@ -7,7 +7,7 @@ export default function userPage() {
   const router = useRouter();
 
   const handleAddEventClick = () => {
-    router.push('/dashboard/registerEvent');
+    router.push('/register-event');
   }
 
   return (

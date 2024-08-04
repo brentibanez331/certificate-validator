@@ -2,6 +2,8 @@
   @tailwind components;
   @tailwind utilities;
 
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
   @layer base {
     :root {
       --background: 0 0% 100%;
@@ -69,10 +71,46 @@
   }
 
   .canvas-container {
-    width: 100%;
+    width: 60%;
     height: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
     position: relative;
+  }
+
+
+  .arial-regular {
+    font-family: Arial, sans-serif;
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  .arial-bold {
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+  }
+
+  .arial-italic {
+    font-family: Arial, sans-serif;
+    font-style: italic;
+  }
+
+  .poppins-regular {
+    font-family: 'Poppins', sans-serif;
+    font-weight: normal;
+  }
+
+  .poppins-bold {
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+  }
+
+  .times-new-roman-regular {
+    font-family: 'Times New Roman', serif;
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  .times-new-roman-bold {
+    font-family: 'Times New Roman', serif;
+    font-weight: bold;
   }

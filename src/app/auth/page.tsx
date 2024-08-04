@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
+import SignupFormasdfasef from '@/components/ui/SignupFormasdf'
 
 
 export default function Form() {
@@ -39,6 +40,7 @@ export default function Form() {
         </TabsList>
         <TabsContent value="signup">
           <SignupForm></SignupForm>
+          {/* <SignupFormasdfasef></SignupFormasdfasef> */}
         </TabsContent>
         <TabsContent value="login">
           <LoginForm></LoginForm>
