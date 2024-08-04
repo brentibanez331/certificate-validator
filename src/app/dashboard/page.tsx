@@ -1,13 +1,13 @@
 "use client"
 import React from 'react'
 import { useRouter } from 'next/navigation';
-import UserHeader from '../../../components/ui/UserHeader'
+import UserHeader from '@/components/ui/UserHeader'
 
 export default function userPage() {
   const router = useRouter();
 
   const handleAddEventClick = () => {
-    router.push('/login/dashboard/registerEvent');
+    router.push('/dashboard/registerEvent');
   }
 
   return (
