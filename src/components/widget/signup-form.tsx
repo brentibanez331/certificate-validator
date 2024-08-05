@@ -81,7 +81,7 @@ export default function SignupForm() {
                     className: "bg-green-500 text-white"
                 })
                 setErrorMessage('');
-                router.push('/dashboard'); 
+                router.push('/auth?type=login'); 
             } else {
                 setErrorMessage('Signup failed.');
                 toast({

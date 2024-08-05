@@ -1,110 +1,12 @@
 
 "use client"
+import { useRouter } from 'next/navigation';
 import UserHeader from '@/components/ui/UserHeader';
-// import {
-//     Table,
-//     TableBody,
-//     TableCaption,
-//     TableCell,
-//     TableFooter,
-//     TableHead,
-//     TableHeader,
-//     TableRow,
-// } from "@/components/ui/table"
-
-// const invoices = [
-//     {
-//         invoice: "INV001",
-//         paymentStatus: "Paid",
-//         totalAmount: "$250.00",
-//         paymentMethod: "Credit Card",
-//     },
-//     {
-//         invoice: "INV002",
-//         paymentStatus: "Pending",
-//         totalAmount: "$150.00",
-//         paymentMethod: "PayPal",
-//     },
-//     {
-//         invoice: "INV003",
-//         paymentStatus: "Unpaid",
-//         totalAmount: "$350.00",
-//         paymentMethod: "Bank Transfer",
-//     },
-//     {
-//         invoice: "INV004",
-//         paymentStatus: "Paid",
-//         totalAmount: "$450.00",
-//         paymentMethod: "Credit Card",
-//     },
-//     {
-//         invoice: "INV005",
-//         paymentStatus: "Paid",
-//         totalAmount: "$550.00",
-//         paymentMethod: "PayPal",
-//     },
-//     {
-//         invoice: "INV006",
-//         paymentStatus: "Pending",
-//         totalAmount: "$200.00",
-//         paymentMethod: "Bank Transfer",
-//     },
-//     {
-//         invoice: "INV007",
-//         paymentStatus: "Unpaid",
-//         totalAmount: "$300.00",
-//         paymentMethod: "Credit Card",
-//     },
-// ]
-
-// export default function ManageEvent() {
-
-
-//     return (
-//         <div className='mx-20'>
-//             <UserHeader />
-//             <Table>
-//                 <TableCaption>A list of your recent invoices.</TableCaption>
-//                 <TableHeader>
-//                     <TableRow>
-//                         <TableHead>Control Number</TableHead>
-//                         <TableHead>Participant Name</TableHead>
-//                         <TableHead>Expiration Date</TableHead>
-//                         <TableHead>Status</TableHead>
-//                         <TableHead>Method</TableHead>
-//                         <TableHead className="text-right">Amount</TableHead>
-//                     </TableRow>
-//                 </TableHeader>
-//                 <TableBody>
-//                     {invoices.map((invoice) => (
-//                         <TableRow key={invoice.invoice}>
-//                             <TableCell className="font-medium">{invoice.invoice}</TableCell>
-//                             <TableCell>{invoice.paymentStatus}</TableCell>
-//                             <TableCell>{invoice.paymentMethod}</TableCell>
-//                             <TableCell className="text-right">{invoice.totalAmount}</TableCell>
-//                         </TableRow>
-//                     ))}
-//                 </TableBody>
-//                 <TableFooter>
-//                     <TableRow>
-//                         <TableCell colSpan={3}>Total</TableCell>
-//                         <TableCell className="text-right">$2,500.00</TableCell>
-//                     </TableRow>
-//                 </TableFooter>
-//             </Table>
-//         </div>
-//     )
-// }
-
-
 import { RxCaretSort } from "react-icons/rx";
 import { FaChevronDown } from "react-icons/fa";
 import { HiDotsHorizontal } from "react-icons/hi";
-// import {
-//     CaretSortIcon,
-//     ChevronDownIcon,
-//     DotsHorizontalIcon,
-// } from "@radix-ui/react-icons"
+import { Badge } from "@/components/ui/badge"
+import { FaDownload } from "react-icons/fa6";
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -138,58 +40,126 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
+import axios from 'axios';
+import { Label } from '@/components/ui/label';
 
-const data: Payment[] = [
+const data: Certificate[] = [
     {
         id: "m5gr84i9",
-        amount: 316,
+        status: "Valid",
         control_number: "IIWQIWIWE",
         participant: "ken99@yahoo.com",
-        expiration_date: "2024-08-31T00:00:00Z"
+        expiration_date: "2024-08-31T00:00:00Z",
+        created_at: "2024-08-04T00:00:00Z"
     },
     {
         id: "3u1reuv4",
-        amount: 242,
+        status: "Valid",
         control_number: "AKQOWKEEW",
         participant: "Abe45@gmail.com",
-        expiration_date: "2024-08-06T00:00:00Z"
+        expiration_date: "2024-08-06T00:00:00Z",
+        created_at: "2024-08-04T00:00:00Z"
     },
     {
         id: "derv1ws0",
-        amount: 837,
+        status: "Revoked",
         control_number: "OPQPCPASM",
         participant: "Monserrat44@gmail.com",
-        expiration_date: "2024-08-02T00:00:00Z"
+        expiration_date: "2024-08-02T00:00:00Z",
+        created_at: "2024-08-04T00:00:00Z"
     },
     {
         id: "5kma53ae",
-        amount: 874,
+        status: "Valid",
+        // amount: 874,
         control_number: "PMXMSDKQQ",
         participant: "Silas22@gmail.com",
-        expiration_date: "2024-08-05T00:00:00Z"
+        expiration_date: "2024-08-05T00:00:00Z",
+        created_at: "2024-08-04T00:00:00Z"
     },
     {
         id: "bhqecj4p",
-        amount: 721,
+        status: "Expired",
+        // amount: 721,
         control_number: "OQIWMSMSQ",
         participant: "carmella@hotmail.com",
-        expiration_date: "2024-08-04T00:00:00Z"
+        expiration_date: "2024-08-04T00:00:00Z",
+        created_at: "2024-08-04T00:00:00Z"
     },
 ]
 
-export type Payment = {
+export type Certificate = {
     id: string
-    amount: number
+    status: string
+    // amount: number
     control_number: string
     participant: string
     expiration_date: string
+    created_at: string
 }
+const eventName = localStorage.getItem("eventName")
+const downloadCertificate = async (controlNumber: string) => {
+    try {
+        const response = await axios.get(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/certificate/download/${controlNumber}`,
+            { responseType: 'blob' } // Important for binary data
+        );
 
-export const columns: ColumnDef<Payment>[] = [
+        // Create a temporary URL to download the blob
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `${controlNumber}.pdf`); // Set the file name
+        document.body.appendChild(link);
+        link.click();
+
+        // Clean up the temporary URL
+        link.parentNode?.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+    } catch (error) {
+        console.error("Error downloading certificate:", error);
+        // Handle the error, e.g., display an error message
+    }
+};
+
+
+const downloadBulkCertificates = async (certificateCodes: string[]) => {
+    try {
+        const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/certificate/download-zip`,
+            certificateCodes,
+            {
+                responseType: 'blob',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            } // Important for binary data
+        );
+
+        // Create a temporary URL to download the blob
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `certificates.zip`); // Set the file name
+        document.body.appendChild(link);
+        link.click();
+
+        // Clean up the temporary URL
+        link.parentNode?.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+    } catch (error) {
+        console.error("Error downloading certificates:", error);
+        // Handle the error, e.g., display an error message
+    }
+};
+
+export const columns: ColumnDef<Certificate>[] = [
     {
         id: "select",
-        header: ({ table } : any) => (
+        header: ({ table }: any) => (
             <Checkbox
                 checked={
                     table.getIsAllPageRowsSelected() ||
@@ -212,7 +182,7 @@ export const columns: ColumnDef<Payment>[] = [
     {
         accessorKey: "control_number",
         header: "Control Number",
-        cell: ({ row } : any) => (
+        cell: ({ row }: any) => (
             <div className="capitalize">{row.getValue("control_number")}</div>
         ),
     },
@@ -244,28 +214,62 @@ export const columns: ColumnDef<Payment>[] = [
                 </Button>
             )
         },
-        cell: ({ row }: any) => <div>{new Date(row.getValue("expiration_date")).toLocaleDateString()}</div>,
+        cell: ({ row }: any) => <div >{new Date(row.getValue("expiration_date")).toLocaleDateString()}</div>,
     },
     {
-        accessorKey: "amount",
-        header: () => <div className="text-right">Amount</div>,
+        accessorKey: "created_at",
+        header: ({ column }: any) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Created At
+                    <RxCaretSort className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
+        cell: ({ row }: any) => <div>{new Date(row.getValue("created_at")).toLocaleDateString()}</div>,
+    },
+    {
+
+        accessorKey: "status",
+        header: "Status",
         cell: ({ row }: any) => {
-            const amount = parseFloat(row.getValue("amount"))
+            const status = row.getValue("status") as string
+            return (
+                <Badge className={`
+                    ${status === "Revoked" ? "bg-red-500" : ""}
+              
+              ${status === "Valid" ? "bg-blue-500" : ""}`
+                }>{row.getValue("status")}</Badge>
+            )
+            // <div className="capitalize text-right">{row.getValue("status")}</div>
 
-            // Format the amount as a dollar amount
-            const formatted = new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "USD",
-            }).format(amount)
-
-            return <div className="text-right font-medium">{formatted}</div>
         },
     },
+
+    // {
+    //     accessorKey: "amount",
+    //     header: () => <div className="text-right">Amount</div>,
+    //     cell: ({ row }: any) => {
+    //         const amount = parseFloat(row.getValue("amount"))
+
+    //         // Format the amount as a dollar amount
+    //         const formatted = new Intl.NumberFormat("en-US", {
+    //             style: "currency",
+    //             currency: "USD",
+    //         }).format(amount)
+
+    //         return <div className="text-right font-medium">{formatted}</div>
+    //     },
+    // },
     {
         id: "actions",
         enableHiding: false,
         cell: ({ row }: any) => {
-            const payment = row.original
+            const certificate = row.original
+            const router = useRouter();
 
             return (
                 <DropdownMenu>
@@ -278,13 +282,14 @@ export const columns: ColumnDef<Payment>[] = [
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(payment.id)}
+                            onClick={() => navigator.clipboard.writeText(certificate.control_number)}
                         >
-                            Copy payment ID
+                            Copy Control Number
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>View customer</DropdownMenuItem>
-                        <DropdownMenuItem>View payment details</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => router.push(`/validate/${certificate.control_number}`)}>View certificate</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => downloadCertificate(certificate.control_number)}>Download</DropdownMenuItem>
+                        <DropdownMenuItem className='text-red-500'>Revoke</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             )
@@ -292,17 +297,59 @@ export const columns: ColumnDef<Payment>[] = [
     },
 ]
 
-export default  function DataTableDemo() {
+export default function DataTableDemo() {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
         []
     )
+    const [isLoading, setIsLoading] = useState(true);
+    const [certificates, setCertificates] = useState<Certificate[]>([]);
     const [columnVisibility, setColumnVisibility] =
         useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = useState({})
 
+    const getAllCertificateCodes = () => {
+        return certificates.map(certificate => certificate.control_number);
+    };
+
+    const allCertificateCodes = useMemo(() => getAllCertificateCodes(), [certificates]);
+
+    const getSelectedCertificateCodes = () => {
+        return table.getSelectedRowModel().rows.map(row => row.original.control_number);
+    };
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setIsLoading(true);
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const eventId = urlParams.get('eventId');
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/certificate?eventId=${eventId}`);
+                const transformedCertificates: Certificate[] = response.data.map((item: any) => ({
+                    id: item.id,
+                    status: item.revoked ? "Revoked" : "Valid", // Determine status
+                    control_number: item.certificateCode,
+                    participant: item.participantName,
+                    expiration_date: item.expirationDate, // Use directly or format
+                    created_at: item.event.startDateTime // Extract from event
+                }));
+
+                setCertificates(transformedCertificates);
+                // setCertificates(response.data); // Assuming your API returns an array of certificates
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                // Handle errors appropriately (e.g., show an error message)
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     const table = useReactTable({
-        data,
+        data: certificates,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -323,42 +370,50 @@ export default  function DataTableDemo() {
     return (
         <div className="mx-20">
             <UserHeader />
-            <div className="flex items-center py-4">
+            <div className='flex flex-col'>
+                <Label className='text-xl'>{`Event: ${eventName}`}</Label>
+            </div>
+            <div className="flex items-center justify-between py-4">
                 <Input
-                    placeholder="Filter emails..."
-                    value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+                    placeholder="Filter participants..."
+                    value={(table.getColumn("participant")?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
-                        table.getColumn("email")?.setFilterValue(event.target.value)
+                        table.getColumn("participant")?.setFilterValue(event.target.value)
                     }
                     className="max-w-sm"
                 />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Columns 
-                            <FaChevronDown className="ml-2 h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {table
-                            .getAllColumns()
-                            .filter((column: any) => column.getCanHide())
-                            .map((column: any) => {
-                                return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className="capitalize"
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) =>
-                                            column.toggleVisibility(!!value)
-                                        }
-                                    >
-                                        {column.id}
-                                    </DropdownMenuCheckboxItem>
-                                )
-                            })}
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <div className='space-x-4 flex items-center'>
+                    <Button onClick={() => downloadBulkCertificates(getSelectedCertificateCodes())} disabled={!table.getIsSomeRowsSelected()}><FaDownload className='size-4 mr-2'></FaDownload>Download Selected</Button>
+                    <Button onClick={() => downloadBulkCertificates(allCertificateCodes)}>Download All</Button>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="outline" className="ml-auto">
+                                Columns
+                                <FaChevronDown className="ml-2 h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            {table
+                                .getAllColumns()
+                                .filter((column: any) => column.getCanHide())
+                                .map((column: any) => {
+                                    return (
+                                        <DropdownMenuCheckboxItem
+                                            key={column.id}
+                                            className="capitalize"
+                                            checked={column.getIsVisible()}
+                                            onCheckedChange={(value) =>
+                                                column.toggleVisibility(!!value)
+                                            }
+                                        >
+                                            {column.id}
+                                        </DropdownMenuCheckboxItem>
+                                    )
+                                })}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+
             </div>
             <div className="rounded-md border">
                 <Table>
@@ -381,7 +436,17 @@ export default  function DataTableDemo() {
                         ))}
                     </TableHeader>
                     <TableBody>
-                        {table.getRowModel().rows?.length ? (
+                        {isLoading ? (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={columns.length}
+                                    className='h-24 text-center'
+                                >
+                                    Loading Certificates...
+
+                                </TableCell>
+                            </TableRow>
+                        ) : table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row: any) => (
                                 <TableRow
                                     key={row.id}
@@ -406,7 +471,8 @@ export default  function DataTableDemo() {
                                     No results.
                                 </TableCell>
                             </TableRow>
-                        )}
+                        )
+                        }
                     </TableBody>
                 </Table>
             </div>

@@ -140,6 +140,7 @@ const EventRegistration = () => {
                     className: "bg-green-500 text-white"
                 });
                 const eventId = response.data.id;
+                localStorage.setItem("eventName", eventData.eventName)
                 router.push(`/edit-certificate?eventId=${eventId}`);
             } else {
                 toast({

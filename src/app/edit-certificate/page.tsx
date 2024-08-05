@@ -181,7 +181,7 @@ const CertificateTemplate = () => {
             title: "Successfully Generated!",
             className: "bg-green-500 text-white"
           })
-          router.push("/manage-event")
+          router.push(`/manage-event?eventId=${eventId}`)
           
 
           // Handle successful submission (e.g., show a success message or navigate to another page)

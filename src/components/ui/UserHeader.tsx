@@ -22,7 +22,10 @@ const Header: React.FC = () => {
 
     return (
         <header className="w-full flex justify-between items-center p-5">
-            <div className="text-lg font-bold">Certificate Validation System</div>
+            <div className="hidden md:flex items-center space-x-4">
+                    <img src="/storage/ICON_COLORED.png" className="size-10 object-contain"></img>
+                    <img src="/storage/WORDMARK.png" className="h-4 object-contain"></img>
+                </div>
             <div className="flex items-center space-x-4">
                 {user ? (
                     <>

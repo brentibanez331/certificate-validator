@@ -40,6 +40,7 @@ export default function LoginForm() {
       if (response.status === 200) {
         const userData = response.data;
         localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem('organizationId', userData.organizationId.toString());
         toast({
           title: "Login successful!",
           className: "bg-green-500 text-white"

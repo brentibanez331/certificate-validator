@@ -31,7 +31,7 @@ export default function Form() {
   return (
     <div className='min-h-screen items-center flex flex-col'>
       <div>
-        <h1 className='text-3xl my-12'>LOGO HERE</h1>
+        <img src="/storage/GV_final.png" className='size-24 my-6 object-contain'></img>
       </div>
       <Tabs value={selectedTab} onValueChange={handleFormSwitch} className="w-[400px]">
         <TabsList className='grid w-full grid-cols-2'>
